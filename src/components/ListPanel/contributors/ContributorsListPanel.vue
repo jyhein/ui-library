@@ -52,8 +52,8 @@
 				</pkp-header>
 				<template v-slot:item-title="{item}">
 					{{ item.fullName }}
-					<badge v-if="item.userGroupName">
-						{{ localize(item.userGroupName) }}
+					<badge v-for="crole in item.contributorRoles" :key="crole">
+						{{ crole }}
 					</badge>
 				</template>
 				<template v-slot:item-subtitle="{item}">
