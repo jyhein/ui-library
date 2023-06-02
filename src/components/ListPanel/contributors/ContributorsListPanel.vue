@@ -174,6 +174,10 @@ export default {
 			type: Boolean,
 			required: true,
 		},
+		contributorRolesPropName: {
+			type: String,
+			required: true,
+		},
 		form: {
 			type: Object,
 			required: true,
@@ -481,7 +485,13 @@ export default {
 					activeForm.method = 'PUT';
 					activeForm.fields = activeForm.fields.map((field) => {
 						if (Object.keys(author).includes(field.name)) {
-							field.value = author[field.name];
+							switch(field.name) {
+								case this.contributorRolesPropName:
+									field.value = Object.keys(author[field.name]);
+									break;
+								default:
+									field.value = author[field.name];
+							}
 						}
 						return field;
 					});

@@ -34,7 +34,6 @@ export default {
 		return {
 			autosavesKeyBase: 'submitAutosaves',
 			categories: {},
-			contributorRoleTerms: {},
 			currentStepId: '',
 			errors: {},
 			isValidating: false,
