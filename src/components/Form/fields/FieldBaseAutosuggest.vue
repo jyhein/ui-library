@@ -149,7 +149,27 @@
 								class="autosuggest__results-item"
 								:class="active && 'autosuggest__results-item--highlighted'"
 							>
-								{{ suggestion.label }}
+								<ul>
+									<li>
+										{{ suggestion.label }}
+									</li>
+									<li
+										v-if="
+											suggestion.value?.uri &&
+											suggestion.value.uri.match(/^http/)
+										"
+									>
+										<a :href="suggestion.value.uri" target="_blank">
+											{{ suggestion.value.uri }}
+										</a>
+									</li>
+									<li v-else-if="suggestion.value?.uri">
+										{{ suggestion.value.uri }}
+									</li>
+									<li v-for="extraItem in suggestion.extraItems ?? {}">
+										{{ extraItem }}
+									</li>
+								</ul>
 							</li>
 						</ComboboxOption>
 					</ComboboxOptions>
