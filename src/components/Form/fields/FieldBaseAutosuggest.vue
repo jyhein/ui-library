@@ -155,7 +155,7 @@
 									</li>
 									<li
 										v-if="
-											suggestion.value?.uri &&
+											suggestion.value.uri &&
 											suggestion.value.uri.match(/^http/)
 										"
 									>
@@ -163,10 +163,13 @@
 											{{ suggestion.value.uri }}
 										</a>
 									</li>
-									<li v-else-if="suggestion.value?.uri">
+									<li v-else-if="suggestion.value.uri">
 										{{ suggestion.value.uri }}
 									</li>
-									<li v-for="extraItem in suggestion.extraItems ?? {}">
+									<li
+										v-for="extraItem in suggestion.extraItems ?? {}"
+										:key="extraItem"
+									>
 										{{ extraItem }}
 									</li>
 								</ul>
