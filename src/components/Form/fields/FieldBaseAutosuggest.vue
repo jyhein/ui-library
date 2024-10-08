@@ -153,12 +153,7 @@
 									<li>
 										{{ suggestion.label }}
 									</li>
-									<li
-										v-if="
-											suggestion.value.uri &&
-											suggestion.value.uri.match(/^http/)
-										"
-									>
+									<li v-if="suggestion.value.uri?.match(/^http/)">
 										<a :href="suggestion.value.uri" target="_blank">
 											{{ suggestion.value.uri }}
 										</a>
@@ -167,8 +162,9 @@
 										{{ suggestion.value.uri }}
 									</li>
 									<li
-										v-for="extraItem in suggestion.extraItems ?? {}"
-										:key="extraItem"
+										v-for="(extraItem, extraItemKey) in suggestion.extraItems ??
+										{}"
+										:key="extraItemKey"
 									>
 										{{ extraItem }}
 									</li>
