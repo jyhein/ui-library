@@ -154,7 +154,7 @@
 										{{ suggestion.label }}
 									</li>
 									<li v-if="suggestion.value.uri?.match(/^http/)">
-										<a :href="suggestion.value.uri" target="_blank">
+										<a :href="suggestion.value.uri" target="_blank" @click.stop>
 											{{ suggestion.value.uri }}
 										</a>
 									</li>
