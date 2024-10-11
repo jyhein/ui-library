@@ -3,11 +3,11 @@ import FieldBaseAutosuggest from './FieldBaseAutosuggest.vue';
 import debounce from 'debounce';
 
 function setSuggestion(value) {
-	const {term, label = null, uri = null, ...extraItems} = value;
+	const {term, label = null, identifier = null, ...extraItems} = value;
 	const suggestion = {
 		value: value,
 		label: label ?? term,
-		uri: uri,
+		identifier: identifier,
 		...(extraItems ? {extraItems: extraItems} : {}),
 	};
 	return suggestion;
