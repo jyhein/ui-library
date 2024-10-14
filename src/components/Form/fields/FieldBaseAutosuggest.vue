@@ -622,6 +622,12 @@ export default {
 			background: @primary;
 			transition: width 0.3s;
 		}
+
+		& ul li {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 	}
 
 	.autosuggest__results-item--highlighted {
