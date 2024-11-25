@@ -150,7 +150,30 @@
 								class="autosuggest__results-item"
 								:class="active && 'autosuggest__results-item--highlighted'"
 							>
-								{{ suggestion.label }}
+								<ul>
+									<li>
+										{{ suggestion.label }}
+									</li>
+									<li v-if="suggestion.value.identifier?.match(/^http/)">
+										<a
+											:href="suggestion.value.identifier"
+											target="_blank"
+											@click.stop
+										>
+											{{ suggestion.value.identifier }}
+										</a>
+									</li>
+									<li v-else-if="suggestion.value.identifier">
+										{{ suggestion.value.identifier }}
+									</li>
+									<li
+										v-for="(extraItem, extraItemKey) in suggestion.extraItems ??
+										{}"
+										:key="extraItemKey"
+									>
+										{{ extraItem }}
+									</li>
+								</ul>
 							</li>
 						</ComboboxOption>
 					</ComboboxOptions>
@@ -591,6 +614,12 @@ export default {
 			height: 100%;
 			background: @primary;
 			transition: width 0.3s;
+		}
+
+		& ul li {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 	}
 

@@ -2,13 +2,23 @@
 import FieldBaseAutosuggest from './FieldBaseAutosuggest.vue';
 import debounce from 'debounce';
 
+function setSuggestion(value) {
+	const {term, label = null, identifier = null, ...extraItems} = value;
+	const suggestion = {
+		value: value,
+		label: label ?? term,
+		identifier: identifier,
+		...(extraItems ? {extraItems: extraItems} : {}),
+	};
+	return suggestion;
+}
+
 export default {
 	name: 'FieldControlledVocab',
 	extends: FieldBaseAutosuggest,
 	data() {
 		return {
 			allSuggestions: [],
-			suggestionsLoaded: false,
 			suggestionsLoading: false,
 			allowCustom: true,
 		};
@@ -25,40 +35,35 @@ export default {
 			if (this.suggestionsLoading) {
 				return;
 			}
-			if (!this.suggestionsLoaded) {
-				this.loadSuggestions(this.setSuggestions);
-			}
+			this.loadSuggestions(this.setSuggestions);
 			this.setSuggestions();
 		},
 
 		/**
 		 * Load suggestions from the API
 		 */
-		loadSuggestions(successCallback) {
+		loadSuggestions: debounce(function (successCallback) {
 			this.suggestionsLoading = true;
 			$.ajax({
 				url: this.apiUrl,
 				type: 'GET',
 				context: this,
-				data: this.isMultilingual ? {locale: this.localeKey} : {},
+				data: {
+					term: this.inputValue ?? null,
+					...(this.isMultilingual ? {locale: this.localeKey} : {}),
+				},
 				error(r) {
 					this.ajaxErrorCallback(r);
 				},
 				success(r) {
-					this.allSuggestions = r.map((v) => {
-						return {
-							value: v,
-							label: v,
-						};
-					});
-					this.suggestionsLoaded = true;
+					this.allSuggestions = r.map((v) => setSuggestion(v));
 					this.suggestionsLoading = false;
 					if (successCallback) {
 						successCallback.apply(this);
 					}
 				},
 			});
-		},
+		}, 250),
 
 		/**
 		 * Override the parent method to accept any typed
@@ -71,7 +76,7 @@ export default {
 				this.select(suggestion);
 			} else if (this.inputValue) {
 				this.select({
-					value: this.inputValue,
+					value: {term: this.inputValue},
 					label: this.inputValue,
 				});
 			}
@@ -93,8 +98,8 @@ export default {
 			this.suggestions = this.allSuggestions.filter(
 				(suggestion) =>
 					!this.inputValue ||
-					(this.inputValue !== suggestion.value &&
-						suggestion.value.match(regex)),
+					(this.inputValue !== suggestion.value.term &&
+						suggestion.value.term.match(regex)),
 			);
 		}, 250),
 	},
